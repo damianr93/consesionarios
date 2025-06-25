@@ -1,5 +1,14 @@
 import React from 'react';
-import { Media, MediaItem } from '../types/types';
+import { Media } from '../types/types';
+
+// Define MediaItem type based on expected structure
+type MediaItem = {
+  tipo: 'imagen' | 'video' | 'archivo' | 'enlace';
+  url: string;
+  alt?: string;
+  poster?: string;
+  nombre?: string;
+};
 
 interface MediaContentProps {
   media: Media;
@@ -9,9 +18,27 @@ const MediaContent: React.FC<MediaContentProps> = ({ media }) => {
   if (media.tipo === "multiple" && media.contenido) {
     return (
       <div className="media-container">
-        {media.contenido.map((item, index) => (
-          <RenderMediaItem key={index} item={item} />
-        ))}
+        {media.contenido.map((item, index) => {
+          // Map 'image' to 'imagen' to match MediaItem type and ensure tipo is valid
+          const tipoMap = {
+            image: 'imagen',
+            imagen: 'imagen',
+            video: 'video',
+            archivo: 'archivo',
+            enlace: 'enlace'
+          } as const;
+
+          const mappedTipo = tipoMap[item.tipo as keyof typeof tipoMap];
+
+          if (!mappedTipo) return null;
+
+          const mappedItem: MediaItem = {
+            ...item,
+            tipo: mappedTipo
+          };
+
+          return <RenderMediaItem key={index} item={mappedItem} />;
+        })}
       </div>
     );
   }

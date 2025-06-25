@@ -1,4 +1,12 @@
-import { MediaItem } from '../types/types'
+// import { MediaItem } from '../types/types'
+// TODO: Replace 'any' with the correct type if available from '../types/types'
+type MediaItem = {
+    tipo: string;
+    url: string;
+    alt?: string;
+    poster?: string;
+    nombre?: string;
+};
 
 export const MEDIA_CONFIG: Record<string, MediaItem[]> = {
     // Productos PIPO
